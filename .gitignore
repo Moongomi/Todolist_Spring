@@ -5,6 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 **/src/main/**/Test*
+**/src/main/**/DemoModel.java
 
 ### STS ###
 .apt_generated

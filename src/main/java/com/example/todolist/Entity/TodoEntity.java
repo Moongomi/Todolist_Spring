@@ -29,5 +29,6 @@ public class TodoEntity {
     private String title;
     private String userId;
     private boolean done;
-    private LocalDate dueDate;
+    private LocalDate duedate;
+    private long daysago;
 }

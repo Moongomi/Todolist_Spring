@@ -17,13 +17,15 @@ public class TodoDto {
     private String id;
     private String title;
     private boolean done;
-    private LocalDate dueDate;
+    private LocalDate duedate;
+    private long daysago;
 
     public TodoDto(final TodoEntity entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.done = entity.isDone();
-        this.dueDate = entity.getDueDate();
+        this.duedate = entity.getDuedate();
+        this.daysago = entity.getDaysago();
     }
 
     public static TodoEntity toEntity(final TodoDto dto) {
@@ -31,7 +33,8 @@ public class TodoDto {
                 .id(dto.getId())
                 .title(dto.getTitle())
                 .done(dto.isDone())
-                .dueDate(dto.getDueDate())
+                .duedate(dto.getDuedate())
+                .daysago(dto.getDaysago())
                 .build();
     }
 }

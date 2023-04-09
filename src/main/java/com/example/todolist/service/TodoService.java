@@ -1,5 +1,7 @@
 package com.example.todolist.service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +20,7 @@ public class TodoService {
     @Autowired
     private TodoRepository repository;
 
-    public String testService(){
+    public String testService() {
         TodoEntity entity = TodoEntity.builder().title("Yeah This is My first title").build();
         repository.save(entity);
         TodoEntity findEntity = repository.findById(entity.getId()).get();
@@ -26,57 +28,56 @@ public class TodoService {
     }
 
     private void validate(final TodoEntity entity) {
-        if(entity == null){
+        if (entity == null) {
             log.warn("Entity is null");
             throw new RuntimeException("Entity is null");
         }
-        
-        if(entity.getUserId() == null){
+
+        if (entity.getUserId() == null) {
             log.warn("Userid wrong.");
             throw new RuntimeException("Userid wrong.");
         }
     }
 
-    public List<TodoEntity> create(final TodoEntity entity){
+    public List<TodoEntity> create(final TodoEntity entity) {
         validate(entity);
+
+        LocalDate currentDate = LocalDate.now();
+        entity.setDuedate(currentDate);
+
+        long daysAgo = ChronoUnit.DAYS.between(entity.getDuedate(), currentDate);
+        entity.setDaysago(daysAgo);
 
         repository.save(entity);
 
         return repository.findByUserId(entity.getUserId());
     }
 
-    public List<TodoEntity> findAll(final String userId){
+    public List<TodoEntity> findAll(final String userId) {
         return repository.findByUserId(userId);
     }
 
-    public List<TodoEntity> update(final TodoEntity entity){
+    public List<TodoEntity> update(final TodoEntity entity) {
         validate(entity);
 
         final Optional<TodoEntity> source = repository.findById(entity.getId());
 
-        if(source.isPresent()){
-            final TodoEntity todo = source.get();
-            todo.setTitle(entity.getTitle());
-            todo.setDone(entity.isDone());
-            repository.save(todo);
-        }
-        /* 
-        source.ifPresent(todo ->{
+        source.ifPresent(todo -> {
             todo.setTitle(entity.getTitle());
             todo.setDone(entity.isDone());
             repository.save(todo);
         });
-        */
+
         return findAll(entity.getUserId());
     }
 
-    public List<TodoEntity> delete(final TodoEntity entity){
+    public List<TodoEntity> delete(final TodoEntity entity) {
         validate(entity);
 
-        try{
+        try {
             repository.delete(entity);
-        } catch(Exception e){
-            log.error("delete error : ",entity.getId(),e);
+        } catch (Exception e) {
+            log.error("delete error : ", entity.getId(), e);
             throw new RuntimeException("delete error : " + entity.getId());
         }
 

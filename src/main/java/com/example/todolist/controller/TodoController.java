@@ -1,5 +1,6 @@
 package com.example.todolist.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class TodoController {
     private TodoService service;
 
     @GetMapping("/test")
-    public ResponseEntity<?> testTodo(){
+    public ResponseEntity<?> testTodo() {
         String str = service.testService();
         List<String> list = new ArrayList<>();
         list.add(str);
@@ -37,19 +38,19 @@ public class TodoController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createTodo(@RequestBody TodoDto dto, @AuthenticationPrincipal String userId){
-        try{
+    public ResponseEntity<?> createTodo(@RequestBody TodoDto dto, @AuthenticationPrincipal String userId) {
+        try {
             TodoEntity entity = TodoDto.toEntity(dto);
-
+            
             entity.setId(null);
             entity.setUserId(userId);
-
+            
             List<TodoEntity> entities = service.create(entity);
             List<TodoDto> dtos = entities.stream().map(TodoDto::new).collect(Collectors.toList());
             ResponseDto<TodoDto> response = ResponseDto.<TodoDto>builder().data(dtos).build();
             return ResponseEntity.ok().body(response);
 
-        } catch(Exception e){
+        } catch (Exception e) {
             String errorMessage = e.getMessage();
             ResponseDto<TodoDto> response = ResponseDto.<TodoDto>builder().errorMessage(errorMessage).build();
             return ResponseEntity.badRequest().body(response);
@@ -57,15 +58,15 @@ public class TodoController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAllTodoList(@AuthenticationPrincipal String userId){
+    public ResponseEntity<?> findAllTodoList(@AuthenticationPrincipal String userId) {
         List<TodoEntity> entities = service.findAll(userId);
         List<TodoDto> dtos = entities.stream().map(TodoDto::new).collect(Collectors.toList());
         ResponseDto<TodoDto> response = ResponseDto.<TodoDto>builder().data(dtos).build();
-        return ResponseEntity.ok().body(response); 
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping
-    public ResponseEntity<?> updateTodo(@RequestBody TodoDto dto,@AuthenticationPrincipal String userId){
+    public ResponseEntity<?> updateTodo(@RequestBody TodoDto dto, @AuthenticationPrincipal String userId) {
         TodoEntity entity = TodoDto.toEntity(dto);
 
         entity.setUserId(userId);
@@ -77,21 +78,21 @@ public class TodoController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> delTodo(@RequestBody TodoDto dto,@AuthenticationPrincipal String userId){
-        try{
+    public ResponseEntity<?> delTodo(@RequestBody TodoDto dto, @AuthenticationPrincipal String userId) {
+        try {
             TodoEntity entity = TodoDto.toEntity(dto);
-    
+
             entity.setUserId(userId);
-    
+
             List<TodoEntity> entities = service.delete(entity);
             List<TodoDto> dtos = entities.stream().map(TodoDto::new).collect(Collectors.toList());
             ResponseDto<TodoDto> response = ResponseDto.<TodoDto>builder().data(dtos).build();
             return ResponseEntity.ok().body(response);
-        } catch(Exception e){
+        } catch (Exception e) {
             String errorMessage = e.getMessage();
             ResponseDto<TodoDto> response = ResponseDto.<TodoDto>builder().errorMessage(errorMessage).build();
             return ResponseEntity.badRequest().body(response);
         }
-        
+
     }
 }
