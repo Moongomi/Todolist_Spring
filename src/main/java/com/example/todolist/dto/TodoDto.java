@@ -1,5 +1,7 @@
 package com.example.todolist.dto;
 
+import java.time.LocalDate;
+
 import com.example.todolist.Entity.TodoEntity;
 
 import lombok.AllArgsConstructor;
@@ -15,15 +17,21 @@ public class TodoDto {
     private String id;
     private String title;
     private boolean done;
+    private LocalDate dueDate;
 
-    public TodoDto(final TodoEntity entity){
+    public TodoDto(final TodoEntity entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.done = entity.isDone();
+        this.dueDate = entity.getDueDate();
     }
 
-    public static TodoEntity toEntity(final TodoDto dto){
-        return TodoEntity.builder().id(dto.getId())
-        .title(dto.getTitle()).done(dto.isDone()).build();
+    public static TodoEntity toEntity(final TodoDto dto) {
+        return TodoEntity.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .done(dto.isDone())
+                .dueDate(dto.getDueDate())
+                .build();
     }
 }

@@ -1,5 +1,7 @@
 package com.example.todolist.Entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -27,4 +29,5 @@ public class TodoEntity {
     private String title;
     private String userId;
     private boolean done;
+    private LocalDate dueDate;
 }
