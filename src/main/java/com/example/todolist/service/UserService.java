@@ -9,8 +9,6 @@ import com.example.todolist.repository.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Optional;
-
 @Slf4j
 @Service
 public class UserService {
@@ -32,7 +30,6 @@ public class UserService {
 
     public UserEntity getByCredentials(final String username, final String password, final PasswordEncoder encoder) {
         final UserEntity orguser = userRepo.findByUsername(username);
-        log.info("입력된 비밀번호 : "+password+" 원래 비밀번호 : "+orguser.getPassword());
         if(orguser!=null && encoder.matches(password, orguser.getPassword())){
             return orguser;
         }
