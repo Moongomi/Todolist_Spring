@@ -1,7 +1,7 @@
 package com.example.todolist.controller;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,10 +41,10 @@ public class TodoController {
     public ResponseEntity<?> createTodo(@RequestBody TodoDto dto, @AuthenticationPrincipal String userId) {
         try {
             TodoEntity entity = TodoDto.toEntity(dto);
-            
+
             entity.setId(null);
             entity.setUserId(userId);
-            
+
             List<TodoEntity> entities = service.create(entity);
             List<TodoDto> dtos = entities.stream().map(TodoDto::new).collect(Collectors.toList());
             ResponseDto<TodoDto> response = ResponseDto.<TodoDto>builder().data(dtos).build();
@@ -93,6 +93,30 @@ public class TodoController {
             ResponseDto<TodoDto> response = ResponseDto.<TodoDto>builder().errorMessage(errorMessage).build();
             return ResponseEntity.badRequest().body(response);
         }
+    }
+/*
+     @GetMapping("/random")
+    public ResponseEntity<?> randowm(@AuthenticationPrincipal String userId) {
+        TodoEntity todoEntity = service.random(userId);
 
+        // TodoDto todoDto = new TodoDto(todoEntity);
+        // ResponseDto<TodoDto> responseDto =
+        // ResponseDto.<TodoDto>builder().data(todoEntity).build();
+
+        TodoDto dtos = new TodoDto(todoEntity);
+        ResponseDto<TodoDto> response = ResponseDto.<TodoDto>builder().data(dtos).build();
+        return ResponseEntity.ok().body(response);
+        //return ResponseEntity.ok().body(todoEntity);
+    }
+ */
+
+
+    @GetMapping("/random")
+    public ResponseEntity<TodoDto> getRandomTodoEntity(@AuthenticationPrincipal String userId) {
+        TodoEntity todoEntity = service.random(userId);
+        TodoDto todoDto = new TodoDto(todoEntity);
+        //List<TodoDto> todoList = Collections.singletonList(todoDto);
+        //ResponseDto<TodoDto> responseDto = ResponseDto.<TodoDto>builder().data(todoList).build();
+        return ResponseEntity.ok().body(todoDto);
     }
 }

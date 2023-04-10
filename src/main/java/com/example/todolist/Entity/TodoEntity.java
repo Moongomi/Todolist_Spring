@@ -2,6 +2,7 @@ package com.example.todolist.Entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -27,6 +28,7 @@ public class TodoEntity {
     private String id;
     
     private String title;
+    @Column(name = "user_id")
     private String userId;
     private boolean done;
     private LocalDate duedate;

@@ -83,4 +83,8 @@ public class TodoService {
 
         return findAll(entity.getUserId());
     }
+
+    public TodoEntity random(final String userId){
+        return repository.getRandomRow(userId);
+    }
 }
