@@ -8,21 +8,21 @@ import org.springframework.stereotype.Service;
 
 import com.example.todolist.Entity.UserEntity;
 
-import lombok.extern.slf4j.Slf4j;
-
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class Token {
-    private static final String SECRET_KEY = "ItisSecretKey";
+    private static final String SECRET_KEY_ACCESS = "ItisSecretKeyforaccess";
+    //private static final String SECRET_KEY_REFRESH = "ItisSecretKeyforrefresh";
 
     public String create(UserEntity userEntity){
         Date expireDate = Date.from(Instant.now().plus(1,ChronoUnit.DAYS));
         return Jwts.builder()
-        .signWith(SignatureAlgorithm.HS512,SECRET_KEY)
+        .signWith(SignatureAlgorithm.HS512,SECRET_KEY_ACCESS)
         .setSubject(userEntity.getId())
         .setIssuer("TodoApp")
         .setIssuedAt(new Date())
@@ -32,7 +32,7 @@ public class Token {
 
     public String validateAndGetUserId(String token){
         Claims claims = Jwts.parser()
-        .setSigningKey(SECRET_KEY)
+        .setSigningKey(SECRET_KEY_ACCESS)
         .parseClaimsJws(token)
         .getBody();
         return claims.getSubject();

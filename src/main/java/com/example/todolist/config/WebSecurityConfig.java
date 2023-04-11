@@ -11,7 +11,7 @@ import org.springframework.web.filter.CorsFilter;
 import com.example.todolist.security.JwtAuthFilter;
 
 @EnableWebSecurity
-public class WebSecurityConfigMe {
+public class WebSecurityConfig {
 
   @Autowired
   private JwtAuthFilter jwtFilter;
