@@ -85,6 +85,11 @@ public class TodoService {
     }
 
     public TodoEntity random(final String userId){
-        return repository.getRandomRow(userId);
+        try{
+            return repository.getRandomRow(userId);
+        } catch (Exception e){
+            throw new RuntimeException("random error");
+        }
+        
     }
 }
