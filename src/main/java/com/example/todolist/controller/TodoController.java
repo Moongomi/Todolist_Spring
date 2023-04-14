@@ -96,9 +96,15 @@ public class TodoController {
     }
 
     @GetMapping("/random")
-    public ResponseEntity<TodoDto> randomTodo(@AuthenticationPrincipal String userId) {
-        TodoEntity todoEntity = service.random(userId);
-        TodoDto todoDto = new TodoDto(todoEntity);
-        return ResponseEntity.ok().body(todoDto);
+    public ResponseEntity<?> randomTodo(@AuthenticationPrincipal String userId) {
+        try {
+            TodoEntity todoEntity = service.random(userId);
+            TodoDto todoDto = new TodoDto(todoEntity);
+            return ResponseEntity.ok().body(todoDto);
+        } catch (Exception e) {
+            String errorMessage = e.getMessage();
+            ResponseDto<TodoDto> response = ResponseDto.<TodoDto>builder().errorMessage(errorMessage).build();
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 }

@@ -30,7 +30,13 @@ public class WebSecurityConfig {
         .authorizeRequests()
         .antMatchers("/", "/auth/**").permitAll()
         .anyRequest()
-        .authenticated();
+        .authenticated()
+        .and()
+        .headers()
+        .xssProtection()
+        .and()
+        .contentSecurityPolicy("script-src 'self'");
+        ;
 
         http.addFilterAfter(
           jwtFilter,
