@@ -13,7 +13,7 @@ import com.example.todolist.Entity.TodoEntity;
 public interface TodoRepository extends JpaRepository<TodoEntity,String>{
     List<TodoEntity> findByUserId(String userId);
 
-    @Query(value = "SELECT * FROM Todo t where t.user_id = ?1 ORDER BY RAND() LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM Todo t where t.user_id = ?1 and t.done = FALSE ORDER BY RAND() LIMIT 1", nativeQuery = true)
     TodoEntity getRandomRow(String userId);
 
 }
