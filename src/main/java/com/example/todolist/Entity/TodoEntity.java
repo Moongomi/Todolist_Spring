@@ -33,5 +33,5 @@ public class TodoEntity {
     private boolean done;
     private LocalDate duedate;
     private long daysago;
-    private long spendTime;
+    private long spendtime;
 }
