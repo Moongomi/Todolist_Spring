@@ -70,6 +70,7 @@ public class TodoController {
         TodoEntity entity = TodoDto.toEntity(dto);
 
         entity.setUserId(userId);
+        System.out.println("spendtime "+entity.getSpendtime());
 
         List<TodoEntity> entities = service.update(entity);
         List<TodoDto> dtos = entities.stream().map(TodoDto::new).collect(Collectors.toList());

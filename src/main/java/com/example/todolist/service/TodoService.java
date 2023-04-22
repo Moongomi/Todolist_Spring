@@ -47,6 +47,7 @@ public class TodoService {
 
         long daysAgo = ChronoUnit.DAYS.between(entity.getDuedate(), currentDate);
         entity.setDaysago(daysAgo);
+        entity.setSpendtime(0);
 
         repository.save(entity);
 
@@ -65,6 +66,7 @@ public class TodoService {
         source.ifPresent(todo -> {
             todo.setTitle(entity.getTitle());
             todo.setDone(entity.isDone());
+            todo.setSpendtime(entity.getSpendtime());
             repository.save(todo);
         });
 

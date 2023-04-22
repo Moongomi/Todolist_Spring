@@ -19,6 +19,7 @@ public class TodoDto {
     private boolean done;
     private LocalDate duedate;
     private long daysago;
+    private long spendtime;
 
     public TodoDto(final TodoEntity entity) {
         this.id = entity.getId();
@@ -26,6 +27,7 @@ public class TodoDto {
         this.done = entity.isDone();
         this.duedate = entity.getDuedate();
         this.daysago = entity.getDaysago();
+        this.spendtime = entity.getSpendtime();
     }
 
     public static TodoEntity toEntity(final TodoDto dto) {
@@ -35,6 +37,7 @@ public class TodoDto {
                 .done(dto.isDone())
                 .duedate(dto.getDuedate())
                 .daysago(dto.getDaysago())
+                .spendtime(dto.getSpendtime())
                 .build();
     }
 }

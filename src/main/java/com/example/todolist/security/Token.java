@@ -1,5 +1,6 @@
 package com.example.todolist.security;
 
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -16,25 +17,32 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class Token {
-    private static final String SECRET_KEY_ACCESS = "ItisSecretKeyforaccess";
-    //private static final String SECRET_KEY_REFRESH = "ItisSecretKeyforrefresh";
+    
+    private static final SecureRandom random = new SecureRandom();
+    private static final byte[] SECRET_KEY_ACCESS = new byte[64];
 
-    public String create(UserEntity userEntity){
-        Date expireDate = Date.from(Instant.now().plus(1,ChronoUnit.DAYS));
-        return Jwts.builder()
-        .signWith(SignatureAlgorithm.HS512,SECRET_KEY_ACCESS)
-        .setSubject(userEntity.getId())
-        .setIssuer("TodoApp")
-        .setIssuedAt(new Date())
-        .setExpiration(expireDate)
-        .compact();
+    static {
+        random.nextBytes(SECRET_KEY_ACCESS);
     }
 
-    public String validateAndGetUserId(String token){
+    // private static final String SECRET_KEY_REFRESH = "ItisSecretKeyforrefresh";
+
+    public String create(UserEntity userEntity) {
+        Date expireDate = Date.from(Instant.now().plus(1, ChronoUnit.DAYS));
+        return Jwts.builder()
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY_ACCESS)
+                .setSubject(userEntity.getId())
+                .setIssuer("TodoApp")
+                .setIssuedAt(new Date())
+                .setExpiration(expireDate)
+                .compact();
+    }
+
+    public String validateAndGetUserId(String token) {
         Claims claims = Jwts.parser()
-        .setSigningKey(SECRET_KEY_ACCESS)
-        .parseClaimsJws(token)
-        .getBody();
+                .setSigningKey(SECRET_KEY_ACCESS)
+                .parseClaimsJws(token)
+                .getBody();
         return claims.getSubject();
     }
 }
